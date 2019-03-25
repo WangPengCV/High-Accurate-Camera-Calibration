@@ -98,17 +98,17 @@ int main()
 		//b.ShowResult();
 		LCalibpanelPoint[i] = b.getMatchPoint();
 	}
-	/*BundleAdjustment opotimiz(LCalibpanelPoint, RCalibpanelPoint);
+	BundleAdjustment opotimiz(LCalibpanelPoint, RCalibpanelPoint);
 	opotimiz.getInitialValue();
 	opotimiz.Optimize();
-	opotimiz.SaveResult("result.yml");*/
+	opotimiz.SaveResult("result.yml");
 
-	//¶ÁÈ¡±ê¶¨½á¹û
+	//è¯»å–æ ‡å®šç»“æœ
 	cv::Mat LeftcameraMatrix(3, 3, CV_64F, cv::Scalar(0)), LeftdistCoeffs(5, 1, CV_64F, cv::Scalar(0));
 	cv::Mat RightcameraMatrix(3, 3, CV_64F, cv::Scalar(0)), RightdistCoeffs(5, 1, CV_64F, cv::Scalar(0));
 	cv::Mat Rotate(3, 1, CV_64F, cv::Scalar(0)), Translate(3, 1, CV_64F, cv::Scalar(0));
 	readResult("result.yml", LeftcameraMatrix, LeftdistCoeffs, RightcameraMatrix, RightdistCoeffs,Rotate,Translate);
-	//ÖØ½¨±ê¶¨°å
+	//é‡å»ºæ ‡å®šæ¿
 	cv::Mat LeftCameraP, RightCameraP;
 	cv::Mat LeftCameraR = cv::Mat::eye(3, 3, CV_64F);
 	cv::Mat LeftCameraT = cv::Mat::zeros(3, 1, CV_64F);
@@ -146,18 +146,18 @@ int main()
 
 
 		}
-		//Í¼ÏñÈ¥»û±ä
+		//å›¾åƒå»ç•¸å˜
 		cv::undistortPoints(Leftpoints, Leftpoints, LeftcameraMatrix, LeftdistCoeffs, cv::noArray(), LeftcameraMatrix);
 		cv::undistortPoints(Rightpoints, Rightpoints, RightcameraMatrix, RightdistCoeffs, cv::noArray(), RightcameraMatrix);
 
-		//Èı½ÇÖØ½¨
+		//ä¸‰è§’é‡å»º
 		cv::Mat pnts4D;
 		cv::triangulatePoints(LeftCameraP, RightCameraP, Leftpoints, Rightpoints, pnts4D);
 		std::vector<cv::Point3d> points;
 		for (int i = 0; i < pnts4D.cols; i++)
 		{
 			cv::Mat x = pnts4D.col(i);
-			x /= x.at<double>(3, 0); // ¹éÒ»»¯£º´Ë´¦µÄ¹éÒ»»¯ÊÇÖ¸´ÓÆë´Î×ø±ê±ä»»µ½·ÇÆë´Î×ø±ê¡£¶ø²»ÊÇ±ä»»µ½¹éÒ»»¯Æ½Ãæ¡£
+			x /= x.at<double>(3, 0); // å½’ä¸€åŒ–ï¼šæ­¤å¤„çš„å½’ä¸€åŒ–æ˜¯æŒ‡ä»é½æ¬¡åæ ‡å˜æ¢åˆ°éé½æ¬¡åæ ‡ã€‚è€Œä¸æ˜¯å˜æ¢åˆ°å½’ä¸€åŒ–å¹³é¢ã€‚
 			cv::Point3d p(
 				x.at<double>(0, 0),
 				x.at<double>(1, 0),
